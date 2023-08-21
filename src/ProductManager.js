@@ -1,8 +1,3 @@
-// Programación Backend - Comisión 47295 
-// Desafío 2 - Manejo de archivos
-
-// Nidia Hernández
-
 const fs = require('fs');
 
 class ProductManager {
@@ -10,8 +5,7 @@ class ProductManager {
 	static id = 0
 
 	constructor() {
-		this.path = "Products.json"
-		fs.writeFileSync(this.path, "[]")
+		this.path = "./Products.json"
 	}
 	
 	async addProduct(title, description, price, thumbnail, code, stock) {
@@ -59,7 +53,7 @@ class ProductManager {
 		let products = await this.getProducts()
 		let match = products.find((product) => product.id === searchedId) 
 		if ( ! match ) {
-			console.log("Product not found")
+			return "ID not found"
 		} else {
 			return match
 		}
@@ -89,38 +83,4 @@ class ProductManager {
 }
 
 
-
-const funcionAsync = async () => {
-  const pm = new ProductManager()
-  console.log("Llamamos getProducts recién creada la instacia:")
-  console.log(await pm.getProducts())
-  
-  console.log("\nAgregamos un producto nuevo y lo mostramos:")
-  await pm.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
-  console.log(await pm.getProducts())
-  console.log("\nIntentamos agregar el mismo producto:")
-  await pm.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
-  
-  console.log("\nAgregamos más productos y los mostramos:")
-  await pm.addProduct("Otro producto ", "Este es un producto prueba", 500, "Sin imagen", "def456", 34);
-  await pm.addProduct("Otro producto ", "Este es un producto prueba", 500, "Sin imagen", "def457", 22);
-  await pm.addProduct("Otro producto ", "Este es un producto prueba", 500, "Sin imagen", "def458", 33);
-  console.log(await pm.getProducts())
-
-  console.log("\nProbamos getProductById con ID existente:")
-  console.log(await pm.getProductById(1))
-  console.log("\nProbamos getProductById con ID inexistente:")
-  console.log(await pm.getProductById(11))
-
-  console.log("\nModificamos un producto y mostramos la lista de productos:")
-  await pm.updateProduct(3, "Modificado", "Producto modificado", 500, "Sin imagen", "xxxx", 33);
-  console.log(await pm.getProducts())
-  console.log("\nProbamos modificar un producto con ID inexistente:")
-  await pm.updateProduct(35, "Modificado", "Producto modificado", 500, "Sin imagen", "xxxx", 33)
-
-  console.log("\nBorramos un producto y mostramos la lista de productos:")
-  await pm.deleteProduct(3);
-  console.log(await pm.getProducts());
-}
-
-funcionAsync();
+module.exports = ProductManager
