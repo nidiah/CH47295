@@ -1,6 +1,6 @@
-const fs = require('fs');
+import * as fs from 'fs'
 
-class ProductManager {
+export class productManager {
 	path
 	static id = 0
 
@@ -8,38 +8,43 @@ class ProductManager {
 		this.path = "./Products.json"
 	}
 	
-	async addProduct(title, description, price, thumbnail, code, stock) {
+	async addProduct(title, description, code, price, status, stock, category, thumbnails) {
 		const newProduct = {
-			id: ProductManager.id,
 			title,
 			description,
-			price,
-			thumbnail,
 			code,
-			stock
+			price,
+			status,
+			stock,
+			category,
+			thumbnails
 		}
-		if (title && description && price && thumbnail && code && stock) {
+		if (title && description && code && price && status && stock && category && thumbnails) {
 			try {
 				if (!fs.existsSync(this.path)) {
 					let products = []
+					newProduct['id'] = ProductManager.id
 					products.push(newProduct)
 					await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t"))
+					return {code: 200, message: "Product added"}
 				} else {
 					let products = await this.getProducts()
 					let match = products.find((product) => product.code === code)
 					if (!match) {
+						productManager.id = products.length
+						newProduct['id'] = productManager.id
 						products.push(newProduct)
-						await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t"))
-						ProductManager.id++
+						await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t"))						
+						return {code: 200, message: "Product added"}
 					} else {
-						console.log("Product already exists")
+						return {code: 400, message: "Product already exists"}
 					}
 				}
 			} catch(error) {
-				console.log(error)
+				return {code: 500, message: error}
 			}
 		} else {
-			console.log("Missing information")
+			return {code: 400, message: "Missing information"}
 		}
 	}
 
@@ -52,35 +57,41 @@ class ProductManager {
 	async getProductById(searchedId) {
 		let products = await this.getProducts()
 		let match = products.find((product) => product.id === searchedId) 
-		if ( ! match ) {
-			return "ID not found"
+		return match
+	}
+
+	async updateProduct(productId, title, description, code, price, status, stock, category, thumbnails) {
+		if (productId && title && description && code && price && status && stock && category && thumbnails) {
+			let productToUpdate = await this.getProductById(productId)
+			if (productToUpdate) {
+				let products = await this.getProducts()
+				let product = products.find(({ id }) => id === productId)
+				product.title = title
+				product.description = description
+				product.code = code
+				product.price = price
+				product.status = status
+				product.stock = stock
+				product.category = category
+				product.thumbnails = thumbnails
+				await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t"))
+				return {code: 200, message: "Product updated"}
+			} else {
+				return {code: 404, message: "Incorrect id"}
+			}
 		} else {
-			return match
+			return {code: 400, message: "Missing information"}
 		}
 	}
-
-	async updateProduct(productId, title, description, price, thumbnail, code, stock) {
-		let productToUpdate = await this.getProductById(productId)
-		if (productToUpdate) {
-		 	let products = await this.getProducts()
-		 	for (let product of products) {
-		 		if (product.id === productId) {
-		 			product.title = title
-		 			product.description = description			 			
-		 		}
-		 	}
-		 	await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t"))
-		}
-	}
-
 
 	async deleteProduct(productId) {
 		let products = await this.getProducts()
 		let updatedProducts = products.filter((product) => product.id != productId)
-		await fs.promises.writeFile(this.path, JSON.stringify(updatedProducts, null, "\t"))
+		if (products.length !== updatedProducts.length) {
+			await fs.promises.writeFile(this.path, JSON.stringify(updatedProducts, null, "\t"))
+			return {code: 200, message: "Product deleted"}
+		} else {
+			return {code: 404, message: "Incorrect id"}	
+		}
 	}
-
 }
-
-
-module.exports = ProductManager
