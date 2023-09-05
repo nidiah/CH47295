@@ -1,38 +1,27 @@
-import * as fs from 'fs'
+import fs from "fs"
 
 export class productManager {
 	path
-	static id = 0
 
 	constructor() {
 		this.path = "./Products.json"
 	}
 	
-	async addProduct(title, description, code, price, status, stock, category, thumbnails) {
-		const newProduct = {
-			title,
-			description,
-			code,
-			price,
-			status,
-			stock,
-			category,
-			thumbnails
-		}
-		if (title && description && code && price && status && stock && category && thumbnails) {
+	async addProduct(product) {
+		const newProduct = product
+		if (newProduct.title && newProduct.description && newProduct.code && newProduct.price && newProduct.status && newProduct.stock && newProduct.category && newProduct.thumbnails) {
 			try {
 				if (!fs.existsSync(this.path)) {
 					let products = []
-					newProduct['id'] = ProductManager.id
+					newProduct['id'] = 0
 					products.push(newProduct)
 					await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t"))
 					return {code: 200, message: "Product added"}
 				} else {
 					let products = await this.getProducts()
-					let match = products.find((product) => product.code === code)
+					let match = products.find((product) => product.code === newProduct.code)
 					if (!match) {
-						productManager.id = products.length
-						newProduct['id'] = productManager.id
+						newProduct['id'] = products.length +1 
 						products.push(newProduct)
 						await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t"))						
 						return {code: 200, message: "Product added"}
@@ -60,20 +49,13 @@ export class productManager {
 		return match
 	}
 
-	async updateProduct(productId, title, description, code, price, status, stock, category, thumbnails) {
-		if (productId && title && description && code && price && status && stock && category && thumbnails) {
+	async updateProduct(productId, newProduct) {
+		if (productId && newProduct.title && newProduct.description && newProduct.code && newProduct.price && newProduct.status && newProduct.stock && newProduct.category && newProduct.thumbnails) {
 			let productToUpdate = await this.getProductById(productId)
 			if (productToUpdate) {
+				newProduct['id'] = productId
 				let products = await this.getProducts()
-				let product = products.find(({ id }) => id === productId)
-				product.title = title
-				product.description = description
-				product.code = code
-				product.price = price
-				product.status = status
-				product.stock = stock
-				product.category = category
-				product.thumbnails = thumbnails
+				products[productId] = newProduct				
 				await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t"))
 				return {code: 200, message: "Product updated"}
 			} else {
@@ -95,3 +77,5 @@ export class productManager {
 		}
 	}
 }
+
+export default productManager

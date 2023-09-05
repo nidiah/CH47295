@@ -1,0 +1,53 @@
+<div class="container">
+    <h1 class="mt-5 mb-5">Productos</h1>
+    <div class="grid text-center" id="product-grid">
+    </div>
+
+    <h1 class="mt-5 mb-5">Modificar lista de productos</h1>
+    <form action="/realtimeproducts" method="post">
+        <h3>Para borrar un producto, ingrese su ID</h3>
+        <div class="mb-3">
+            <label class="form-label">ID</label>
+            <input type="text" class="form-control" name="id">
+            <button type="submit" class="btn btn-primary" id="deleteBtn">Eliminar</button>
+        </div>
+        <h3>Para agragar un producto, complete los siguienes campos</h3>
+        <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input type="text" class="form-control" name="title">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <input type="text" class="form-control" name="description">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Código</label>
+            <input type="text" class="form-control" name="code">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Precio</label>
+            <input type="number" class="form-control" name="price">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <input type="checkbox" checked="yes" class="form-check-input" name="status" >
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Stock</label>
+            <input type="number" class="form-control" name="stock">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Categoría</label>
+            <input type="text" class="form-control" name="category">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Thumbnail</label>
+            <input type="text" class="form-control" value="Sin imagen" name="thumbnails">
+        </div>                                
+        <button type="submit" class="btn btn-primary" id="addBtn">Agregar</button>
+    </form>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script> 
+<script src="/js/index.js"></script>

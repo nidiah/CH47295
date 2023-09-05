@@ -25,15 +25,15 @@ router.get("/:pid", async (req, res) => {
 })
 
 router.post("/", async (req, res) => {
-	let {title, description, code, price, status, stock, category, thumbnails} = req.body
-	let result = await pm.addProduct(title, description, code, price, status, stock, category, thumbnails)
+	let product = req.body
+	let result = await pm.addProduct(product)
 	res.status(result.code).send(result.message)
 })
 
 router.put("/:pid", async (req, res) => {
 	let productId = parseInt(req.params.pid, 10)
-	let {title, description, code, price, status, stock, category, thumbnails} = req.body
-	let result =  await pm.updateProduct(productId, title, description, code, price, status, stock, category, thumbnails)
+	let product = req.body
+	let result =  await pm.updateProduct(productId, product)
 	res.status(result.code).send(result.message)
 })
 

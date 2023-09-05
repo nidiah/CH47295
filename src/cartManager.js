@@ -1,8 +1,7 @@
-import * as fs from 'fs'
+import fs from "fs"
 
 export class cartManager {
 	path
-	static id = 0
 
 	constructor() {
 		this.path = "./Carts.json"
@@ -10,7 +9,7 @@ export class cartManager {
 
     async createCart() {
         let newCart = {
-            id: cartManager.id,
+            id: 0,
             products: []
         }
         try {
@@ -21,8 +20,7 @@ export class cartManager {
                 return {code: 200, message: "Cart created"}
             } else { 
                 let carts = await this.getCarts()
-                cartManager.id = carts.length
-                newCart.id = cartManager.id
+                newCart.id = carts.length
                 carts.push(newCart)
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, "\t"))
                 return {code: 200, message: "New cart created"}
@@ -80,3 +78,5 @@ export class cartManager {
     }
 
 }
+
+export default cartManager

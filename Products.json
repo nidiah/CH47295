@@ -1,18 +1,5 @@
 [
 	{
-		"title": "AAAA",
-		"description": "Este es un producto prueba",
-		"code": "123abc",
-		"price": 999,
-		"status": true,
-		"stock": 25,
-		"category": "AB",
-		"thumbnails": [
-			"Sin imagen"
-		],
-		"id": 0
-	},
-	{
 		"title": "UPDATED PRODUCT",
 		"description": "Cambio la descripción",
 		"code": "NEWCODE",
@@ -167,5 +154,16 @@
 			"Sin imagen"
 		],
 		"id": 12
+	},
+	{
+		"title": "ggggg",
+		"description": "ggggg",
+		"code": "ggggg",
+		"price": "9999",
+		"status": "on",
+		"stock": "999",
+		"category": "ggggg",
+		"thumbnails": "Sin imagen",
+		"id": 13
 	}
 ]
