@@ -26,6 +26,11 @@ router.get("/:pid", async (req, res) => {
 
 router.post("/", async (req, res) => {
 	let product = req.body
+
+	if (product.status == undefined) {
+		product.status = true
+	}
+	
 	let result = await pm.addProduct(product)
 	res.status(result.code).send(result.message)
 })

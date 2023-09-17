@@ -4,9 +4,6 @@ let productGrid = document.getElementById("product-grid")
 let deleteBtn = document.getElementById("deleteBtn")
 let addBtn = document.getElementById("addBtn")
 
-// Corroboramos conexión servidor-cliente
-socket.on("checking", (data) => console.log(data))
-
 function buildProductList(productList) {
     let cards = ""
     for (const product of productList) {
@@ -36,6 +33,7 @@ socket.on("displayProducts", async (data) => {
 
 // Modificamos lista de productos en tiempo real
 socket.on("modifyProductList", (data) => {
+    productGrid.innerHTML = buildProductList(data)
     deleteBtn.addEventListener("click", ()=> {
         productGrid.innerHTML = buildProductList(data)
     })

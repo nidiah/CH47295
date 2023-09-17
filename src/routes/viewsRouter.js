@@ -11,18 +11,9 @@ router.get("/", async (req, res) => {
 })
 
 
-router.get("/realtimeproducts", (req, res) => {    
+router.get("/realtimeproducts", async (req, res) => {    
     res.render("realTimeProducts")
-
-    req.context.socketServer.on("connection", async (socket) => {
-        // Corroboramos conexión servidor-cliente
-        console.log(`Cliente conectado: ${socket.id}`)
-        socket.emit("checking", {mensaje: `Verificando conexión con socket ${socket.id}`})
-        // Enviamos lista de productos al cliente para  
-        // que la muestre desde websocket
-        let products = await pm.getProducts()
-        socket.emit("displayProducts", products)
-    })
+    //req.context.socketServer.emit("displayProducts", (products))
     
 })
 
@@ -49,10 +40,8 @@ router.post("/realtimeproducts", async (req, res) => {
     await pm.addProduct(newProduct)
 
     // Mostrar lista de productos modificada
-    req.context.socketServer.on("Nconnection", async (socket) => {
-        let products = await pm.getProducts()
-        socket.emit("modifyProductList", products)
-    })
+    req.context.socketServer.emit("modifyProductList", (await pm.getProducts()))
+
 })
 
 export default router
