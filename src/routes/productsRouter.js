@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { productManager } from '../productManager.js'
+import productManager from '../dao/db/productManager.js'
 
 const router =  Router()
 const pm = new productManager()
@@ -26,7 +26,6 @@ router.get("/:pid", async (req, res) => {
 
 router.post("/", async (req, res) => {
 	let product = req.body
-
 	if (product.status == undefined) {
 		product.status = true
 	}

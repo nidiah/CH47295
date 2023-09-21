@@ -1,8 +1,11 @@
 import fs from "fs"
+//import cartModel from "../models/cartModel.js"
 
 export class cartManager {
 	path
 
+    // Reajustar los servicios con el fin de que puedan funcionar
+	// con Mongoose en lugar de FileSystem
 	constructor() {
 		this.path = "./Carts.json"
 	}
@@ -16,12 +19,14 @@ export class cartManager {
             if (!fs.existsSync(this.path)) { 
                 let carts = []
                 carts.push(newCart)
+                // reajustar para Mongoose
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, "\t"))
                 return {code: 200, message: "Cart created"}
             } else { 
                 let carts = await this.getCarts()
                 newCart.id = carts.length
                 carts.push(newCart)
+                // reajustar para Mongoose
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, "\t"))
                 return {code: 200, message: "New cart created"}
             }
@@ -31,6 +36,7 @@ export class cartManager {
     }
 
     async getCarts() {
+        // reajustar para Mongoose
         let fileCont = await fs.promises.readFile(this.path, "utf-8")
         let carts = JSON.parse(fileCont)
         return carts
@@ -65,10 +71,12 @@ export class cartManager {
                     product: productId,
                     quantity: 1
                 })
+                // reajustar para Mongoose
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, "\t"))
                 return {code: 200, message: "New product added to cart"}
             } else {
                 product.quantity++
+                // reajustar para Mongoose
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, "\t"))
                 return {code: 200, message: "Product added to cart"}
             }

@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { productManager } from '../productManager.js'
+import productManager from '../dao/db/productManager.js'
 
 const router =  Router()
 const pm = new productManager()
@@ -10,6 +10,9 @@ router.get("/", async (req, res) => {
     res.render("home", {products})
 })
 
+router.get("/chat", async (req, res) => {
+    res.render("chat", {})
+})
 
 router.get("/realtimeproducts", async (req, res) => {    
     res.render("realTimeProducts")
@@ -21,7 +24,6 @@ router.post("/realtimeproducts", async (req, res) => {
     res.render("realTimeProducts")
     // Borrar un producto
     const productId = req.body.id
-
     if (productId != undefined) {
         await pm.deleteProduct(productId)
     }

@@ -32,6 +32,7 @@ socket.on("displayProducts", async (data) => {
 })
 
 // Modificamos lista de productos en tiempo real
+////
 socket.on("modifyProductList", (data) => {
     productGrid.innerHTML = buildProductList(data)
     deleteBtn.addEventListener("click", ()=> {
