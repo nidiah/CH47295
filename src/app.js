@@ -8,7 +8,7 @@ import viewsRouter from "./routes/viewsRouter.js"
 import productManager from './dao/db/productManager.js'
 import initEvents from './socket/index.js';
 
-mongoose.connect("mongodb+srv://nidinhernandez:0sYocp1J1IM0s8VF@cluster0.6htebon.mongodb.net/?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://nidinhernandez:<password>@cluster0.6htebon.mongodb.net/?retryWrites=true&w=majority")
 
 const app = express()
 const httpServer = app.listen(8080, () => console.log("Listening on port 8080"))
